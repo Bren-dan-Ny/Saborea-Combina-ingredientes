@@ -1,7 +1,7 @@
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
-import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./shared/context/UserContext";
 import { FavoritesProvider } from "./shared/context/FavoritesContext";
+import { HashRouter } from "react-router-dom";
 import AppRoutes from "./router/AppRoutes";
 import { Toaster } from "sonner";
 import "../index.css";
@@ -9,7 +9,7 @@ import "../index.css";
 function App() {
   return (
     <>
-      <BrowserRouter basename="/Saborea-Combina-ingredientes/saborea/">
+      <HashRouter>
         <ChakraProvider value={defaultSystem}>
           <AuthProvider>
             <FavoritesProvider>
@@ -18,7 +18,7 @@ function App() {
             </FavoritesProvider>
           </AuthProvider>
         </ChakraProvider>
-      </BrowserRouter>
+      </HashRouter>
     </>
   );
 }
