@@ -1,4 +1,4 @@
-import { Box, Heading, Text, SimpleGrid, VStack, Flex } from "@chakra-ui/react";
+import { Heading, Text, SimpleGrid, VStack, Flex } from "@chakra-ui/react";
 import { useFavorites } from "../../shared/context/FavoritesContext";
 import { RecipeCard } from "../../components/card/recipeCard/RecipeCard";
 import BaseLayout from "../../shared/layout/BaseLayout";

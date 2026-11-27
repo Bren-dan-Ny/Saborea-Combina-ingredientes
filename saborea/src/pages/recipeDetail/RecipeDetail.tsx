@@ -9,11 +9,10 @@ import {
   VStack,
   Spinner,
   Flex,
-  Link,
   List,
   Badge,
 } from "@chakra-ui/react";
-import { FaArrowLeft, FaRegClock } from "react-icons/fa6"; // Agregué el reloj
+import { FaArrowLeft, FaRegClock } from "react-icons/fa6";
 import BaseLayout from "../../shared/layout/BaseLayout";
 
 const RecipeDetail = () => {
@@ -36,7 +35,7 @@ const RecipeDetail = () => {
   if (loading) {
     return (
       <Flex justify="center" align="center" h="100vh">
-        <Spinner size="xl" color="orangered" />
+        <Spinner size="xl" color="orangeBrand" />
       </Flex>
     );
   }
@@ -71,11 +70,10 @@ const RecipeDetail = () => {
           w: "100%",
           h: "100%",
           bg: "blackAlpha.400",
-          backdropFilter: "blur(8px)", // <-- 1. EL EFECTO BLUR
+          backdropFilter: "blur(8px)",
           zIndex: 0,
         }}
       >
-        {/* 2. LA TARJETA BLANCA FLOTANTE */}
         <Box
           maxW="900px"
           mx="auto"
@@ -85,20 +83,20 @@ const RecipeDetail = () => {
           p={{ base: 6, md: 10 }}
           position="relative"
         >
-          {/* Botón de volver */}
-          <Link
-            as={RouterLink}
+          <RouterLink
             to="/"
-            display="inline-flex"
-            alignItems="center"
-            mb={6}
-            color="gray.600"
-            _hover={{ textDecoration: "none", color: "orangered" }}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              marginBottom: "24px",
+              color: "#4A5568",
+              textDecoration: "none",
+              fontWeight: "500",
+            }}
           >
             <FaArrowLeft style={{ marginRight: "8px" }} /> Volver al inicio
-          </Link>
+          </RouterLink>
 
-          {/* Imagen de la receta (más pequeña, estilo redondeado) */}
           <Image
             src={recipe.image}
             alt={recipe.title}
@@ -121,7 +119,7 @@ const RecipeDetail = () => {
 
           <Flex gap={4} mb={8} flexWrap="wrap">
             <Badge
-              colorPalette="orangered"
+              colorPalette="orangeBrand"
               variant="subtle"
               p={2}
               borderRadius="md"
@@ -175,9 +173,9 @@ const RecipeDetail = () => {
                   bg="gray.50"
                   borderRadius="md"
                   borderLeft="4px solid"
-                  borderColor="orangered" // Detalle visual: línea naranja a la izquierda
+                  borderColor="orangeBrand"
                 >
-                  <Text fontWeight="bold" color="orangered" mb={1}>
+                  <Text fontWeight="bold" color="orangeBrand" mb={1}>
                     Paso {step.number}
                   </Text>
                   <Text color="gray.700">{step.step}</Text>
