@@ -1,13 +1,5 @@
 import { Link as RouterLink, NavLink, useLocation } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Link,
-  Image,
-  useBreakpointValue,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, HStack, Image } from "@chakra-ui/react";
 import { Paths } from "../../router/path";
 import LogoIso from "../../assets/saborea-isologo.png";
 import LogoCompleto from "../../assets/saborea-logo.svg";
@@ -22,11 +14,6 @@ const Header = () => {
 
   const isFavoritesPage = location.pathname === "/favorites";
 
-  const logoSrc = useBreakpointValue({
-    base: LogoIso,
-    md: LogoCompleto,
-  });
-
   return (
     <Box
       as="header"
@@ -37,15 +24,15 @@ const Header = () => {
       mx={{ base: 6, md: 12, lg: 20 }}
     >
       <Flex align="center" justify="space-between">
-        <Link as={RouterLink} to="/">
+        {/* 1. LOGO: Usamos RouterLink directo */}
+        <RouterLink to="/">
           <Image
-            src={logoSrc}
+            src={LogoIso}
             alt="Saborea"
             h="40px"
             objectFit="contain"
             display={{ base: "block", md: "none" }}
           />
-
           <Image
             src={LogoCompleto}
             alt="Saborea - Comer bien empieza por aquí"
@@ -53,68 +40,65 @@ const Header = () => {
             objectFit="contain"
             display={{ base: "none", md: "block" }}
           />
-        </Link>
+        </RouterLink>
 
         <HStack gap={{ base: 3, md: 6 }}>
+          {/* 2. RECETAS: Usamos etiquetas <a> o <RouterLink> */}
           {isFavoritesPage ? (
-            <Link
-              as={RouterLink}
+            <RouterLink
               to="/"
-              textDecoration="none"
-              color="gray.600"
-              fontWeight="500"
-              fontSize={{ base: "xs", md: "sm" }}
-              transition="all 0.2s ease"
-              _hover={{ color: "ink" }}
-            >
-              Recetas
-            </Link>
-          ) : (
-            <Link
-              href="#recetas"
-              textDecoration="none"
-              color="gray.600"
-              fontWeight="500"
-              fontSize={{ base: "xs", md: "sm" }}
-              transition="all 0.2s ease"
-              _hover={{
-                color: "ink",
+              style={{
                 textDecoration: "none",
+                color: "#4A5568",
+                fontWeight: 500,
+                fontSize: "0.875rem",
               }}
             >
               Recetas
-            </Link>
+            </RouterLink>
+          ) : (
+            <a
+              href="#recetas"
+              style={{
+                textDecoration: "none",
+                color: "#4A5568",
+                fontWeight: 500,
+                fontSize: "0.875rem",
+              }}
+            >
+              Recetas
+            </a>
           )}
 
-          <Link
-            as={NavLink}
+          {/* 3. FAVORITOS: Usamos NavLink directo */}
+          <NavLink
             to={Paths.favorites}
-            textDecoration="none"
-            color="gray.600"
-            fontWeight="500"
-            fontSize={{ base: "xs", md: "sm" }}
-            transition="all 0.2s ease"
-            display="flex"
-            alignItems="center"
-            _hover={{ color: "ink" }}
-            _activeLink={{ color: "ink", fontWeight: "bold" }}
+            style={({ isActive }) => ({
+              textDecoration: "none",
+              color: isActive ? "#171c1a" : "#4A5568",
+              fontWeight: isActive ? "bold" : 500,
+              fontSize: "0.875rem",
+              display: "flex",
+              alignItems: "center",
+            })}
           >
             Favoritos
             {favorites.length > 0 && (
-              <Box
-                as="span"
-                color="orangered"
-                fontSize="xs"
-                fontWeight="bold"
-                ml={1}
-                borderRadius="full"
+              <span
+                style={{
+                  color: "#f05a32",
+                  fontSize: "0.75rem",
+                  fontWeight: "bold",
+                  marginLeft: "4px",
+                }}
               >
                 {favorites.length}
-              </Box>
+              </span>
             )}
-          </Link>
+          </NavLink>
         </HStack>
 
+        {/* 4. BOTÓN DE USUARIO / LOGIN */}
         {user ? (
           <Button
             bg="#171c1a"
@@ -127,22 +111,31 @@ const Header = () => {
             {user.username.charAt(0).toUpperCase()}
           </Button>
         ) : (
-          <Button
-            as={RouterLink as any}
+          // Usamos RouterLink directo dentro de un Button
+          <RouterLink
             to="/login"
-            bg="#171c1a"
-            variant="outline"
-            color="white"
-            fontSize={{ base: "xs", md: "sm" }}
-            px={{ base: 2, md: 4 }}
-            py={{ base: 1, md: 2 }}
-            _hover={{ bg: "orangered" }}
+            style={{
+              backgroundColor: "#171c1a",
+              color: "white",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+              paddingTop: "8px",
+              paddingBottom: "8px",
+              borderRadius: "8px",
+              display: "inline-flex",
+              alignItems: "center",
+              textDecoration: "none",
+              fontWeight: "500",
+            }}
           >
-            <Box as="span" display={{ base: "none", md: "inline" }} mr={2}>
+            <span
+              style={{ display: "none", marginRight: "8px" }}
+              className="login-text"
+            >
               Login
-            </Box>
+            </span>
             <RiArrowRightLine />
-          </Button>
+          </RouterLink>
         )}
       </Flex>
     </Box>

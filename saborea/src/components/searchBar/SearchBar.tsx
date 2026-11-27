@@ -6,7 +6,7 @@ import {
 } from "react";
 import { Flex, Text, Button, Input, Box, Tag } from "@chakra-ui/react";
 import { CiSearch } from "react-icons/ci";
-import { autocompleteIngredients } from "../../../services/mealService";
+import { autocompleteIngredients } from "../../services/mealService";
 
 const MAX_INGREDIENTES = 2;
 

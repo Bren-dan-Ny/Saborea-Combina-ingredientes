@@ -3,7 +3,7 @@ import { Paths } from "./path";
 import Home from "../pages/home/Home";
 import Login from "../pages/login/Login";
 import Favorites from "../pages/favorites/Favorites";
-import ProtectedRoute from "./ProtectedRoute";
+import ProtectedRoute from "./outlets/ProtectedRoute";
 import RecipeDetail from "../pages/recipeDetail/RecipeDetail";
 
 const AppRoutes = () => {

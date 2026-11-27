@@ -8,7 +8,7 @@ import {
   Heading,
   Image,
 } from "@chakra-ui/react";
-import SearchBar from "./searchBar/SearchBar"; // Ajusta tu ruta
+import SearchBar from "../../components/searchBar/SearchBar";
 
 interface HeroSectionProps {
   onSearch: (ingredients: string) => void;
