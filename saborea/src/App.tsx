@@ -10,7 +10,7 @@ import "../index.css";
 function App() {
   return (
     <>
-      <BrowserRouter>
+      <BrowserRouter basename="/Saborea-Combina-ingredientes/saborea/">
         <ChakraProvider value={system}>
           <AuthProvider>
             <FavoritesProvider>
