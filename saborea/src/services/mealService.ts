@@ -58,3 +58,17 @@ export const getRandomRecipes = async () => {
     return [];
   }
 };
+
+export const getRecipeInformation = async (id: string | number) => {
+  const url = `https://api.spoonacular.com/recipes/${id}/information?apiKey=${API_KEY}`;
+
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw Error("No se pudo cargar la receta");
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Error obteniendo informacion de la receta", error);
+    return null;
+  }
+};

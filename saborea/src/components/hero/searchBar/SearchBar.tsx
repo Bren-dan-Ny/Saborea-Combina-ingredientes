@@ -4,7 +4,7 @@ import {
   type SubmitEvent,
   type KeyboardEvent,
 } from "react";
-import { Flex, Text, Button, Input, VStack, Box, Tag } from "@chakra-ui/react";
+import { Flex, Text, Button, Input, Box, Tag } from "@chakra-ui/react";
 import { CiSearch } from "react-icons/ci";
 import { autocompleteIngredients } from "../../../services/mealService";
 
@@ -15,7 +15,7 @@ interface SearchHeroProps {
   isLoading?: boolean;
 }
 
-const SearchHero = ({ onSearch, isLoading }: SearchHeroProps) => {
+const SearchBar = ({ onSearch, isLoading }: SearchHeroProps) => {
   const [query, setQuery] = useState("");
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
   const [sugerencias, setSugerencias] = useState<string[]>([]);
@@ -70,74 +70,88 @@ const SearchHero = ({ onSearch, isLoading }: SearchHeroProps) => {
 
   return (
     <form onSubmit={handleSubmit} style={{ width: "100%" }}>
-      <VStack
-        gap={0}
-        position="relative"
-        w="100%"
-        boxShadow="5px 5px 0px"
-        bg="#fbfaf5"
-        border="1px solid"
-        borderColor="line"
-      >
-        <Flex w="100%" align="center" gap={2} px={4} py={2} minH="56px">
-          <Flex color="gray.500" flexShrink={0}>
-            <CiSearch size="24px" />
+      <Box position="relative" w="100%">
+        <Flex
+          direction={{ base: "column", md: "row" }}
+          w="100%"
+          boxShadow="4px 4px 0px"
+          bg="#fbfaf5"
+          border="1px solid"
+          borderColor="line"
+        >
+          <Flex
+            flex="1"
+            align="center"
+            gap={2}
+            px={{ base: 2, md: 4 }}
+            py={2}
+            minH="50px"
+            flexWrap="wrap"
+            borderRight={{ base: "none", md: "1px solid" }}
+            borderColor={{ base: "none", md: "line" }}
+          >
+            <Flex color="gray.500" flexShrink={0}>
+              <CiSearch size="24px" />
+            </Flex>
+
+            {/* ETIQUETAS SELECCIONADAS */}
+            {selectedIngredients.map((ing) => (
+              <Tag.Root
+                key={ing}
+                size={{ base: "sm", md: "md" }} // Un poco más pequeñas
+                variant="solid"
+                colorPalette="orangered"
+                flexShrink={0}
+              >
+                <Tag.Label>{ing}</Tag.Label>
+                <Tag.EndElement>
+                  <Tag.CloseTrigger onClick={() => removeIngrediente(ing)} />
+                </Tag.EndElement>
+              </Tag.Root>
+            ))}
+
+            {/* INPUT */}
+            {selectedIngredients.length < MAX_INGREDIENTES && (
+              <Input
+                type="text"
+                placeholder={
+                  selectedIngredients.length === 0
+                    ? "Ej. Tomate, Aguacate..."
+                    : "Añade otro..."
+                }
+                border="none"
+                value={query}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setShowSugerencias(true);
+                }}
+                onFocus={() => setShowSugerencias(true)}
+                onBlur={() => setTimeout(() => setShowSugerencias(false), 200)}
+                onKeyDown={handleKeyDown}
+                flex="1"
+                minW="100px"
+                px={0}
+                fontSize={{ base: "sm", md: "md" }}
+                _focus={{ outline: "none", boxShadow: "none" }}
+              />
+            )}
           </Flex>
 
-          {/* ETIQUETAS SELECCIONADAS */}
-          {selectedIngredients.map((ing) => (
-            <Tag.Root
-              key={ing}
-              size="lg"
-              variant="solid"
-              colorPalette="orangeBrand"
-              flexShrink={0}
-            >
-              <Tag.Label>{ing}</Tag.Label>
-              <Tag.EndElement>
-                <Tag.CloseTrigger onClick={() => removeIngrediente(ing)} />
-              </Tag.EndElement>
-            </Tag.Root>
-          ))}
-
-          {/* INPUT */}
-          {selectedIngredients.length < MAX_INGREDIENTES && (
-            <Input
-              type="text"
-              placeholder={
-                selectedIngredients.length === 0
-                  ? "Ej. Tomate, Aguacate..."
-                  : "Añade otro..."
-              }
-              border="none"
-              value={query}
-              onChange={(e) => {
-                setQuery(e.target.value);
-                setShowSugerencias(true);
-              }}
-              onFocus={() => setShowSugerencias(true)}
-              onBlur={() => setTimeout(() => setShowSugerencias(false), 200)}
-              onKeyDown={handleKeyDown}
-              flex="1"
-              minW="100px"
-              px={0}
-              _focus={{ outline: "none", boxShadow: "none" }}
-            />
-          )}
+          <Button
+            type="submit"
+            bg="orangered"
+            color="white"
+            borderRadius="0"
+            w={{ base: "100%", md: "auto" }}
+            h={{ base: "44px", md: "auto" }}
+            px={8}
+            fontSize={{ base: "sm", md: "md" }}
+            loading={isLoading}
+            _hover={{ opacity: 0.9 }}
+          >
+            Buscar
+          </Button>
         </Flex>
-
-        <Button
-          type="submit"
-          bg="orangered"
-          color="white"
-          borderRadius="0"
-          w="100%"
-          h="50px"
-          isLoading={isLoading}
-          _hover={{ opacity: 0.9 }}
-        >
-          Buscar
-        </Button>
 
         {/* LISTA FLOTANTE DE SUGERENCIAS */}
         {showSugerencias &&
@@ -155,8 +169,10 @@ const SearchHero = ({ onSearch, isLoading }: SearchHeroProps) => {
               boxShadow="lg"
               zIndex={10}
               mt={1}
+              maxH="200px"
+              overflowY="auto"
             >
-              <VStack align="stretch" gap={0}>
+              <Flex direction="column">
                 {sugerencias.map((sugerencia) => (
                   <Box
                     key={sugerencia}
@@ -169,12 +185,12 @@ const SearchHero = ({ onSearch, isLoading }: SearchHeroProps) => {
                     <Text fontSize="sm">{sugerencia}</Text>
                   </Box>
                 ))}
-              </VStack>
+              </Flex>
             </Box>
           )}
-      </VStack>
+      </Box>
     </form>
   );
 };
 
-export default SearchHero;
+export default SearchBar;

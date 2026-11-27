@@ -11,7 +11,7 @@ import {
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../shared/context/UserContext";
 import { useState, type SyntheticEvent } from "react";
-import Logo from "../../assets/saborea-logo.png";
+import Logo from "../../assets/saborea-logo.svg";
 
 const Login = () => {
   const { login } = useAuth();

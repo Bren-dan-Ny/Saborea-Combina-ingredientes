@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import SearchHero from "../../components/heroSection/searchHero/SearchHero";
 import BaseLayout from "../../shared/layout/BaseLayout";
-import RecipeList from "../../components/recipeList/RecipeList";
+import RecipeList from "../../components/card/recipeList/RecipeList";
 import {
   searchRecipesByIngredients,
   getRandomRecipes,
 } from "../../services/mealService";
-import { Text, Flex, HStack, Heading, VStack } from "@chakra-ui/react";
+import { Text, Flex, Heading, VStack, Box } from "@chakra-ui/react";
+import HeroSection from "../../components/hero/HeroSection";
 
 const Home = () => {
   const [recipes, setRecipes] = useState<any[]>([]);
@@ -22,9 +22,8 @@ const Home = () => {
     };
 
     cargarRecetasIniciales();
-  }, []); // El array vacío hace que solo se ejecute al cargar la página
+  }, []);
 
-  // 3. La función de búsqueda también va por fuera
   const handleSearch = async (ingrediente: string) => {
     setLoading(true);
     setHasSearched(true);
@@ -41,116 +40,102 @@ const Home = () => {
 
   return (
     <BaseLayout>
-      <VStack gap={5} my={10} align="stretch">
-        <HStack>
-          <Flex
-            w="30px"
-            h="30px"
-            border="1px solid"
-            borderColor="ink"
-            borderRadius="full"
-            align="center"
-            justify="center"
-          >
-            <Text fontSize="x-small" fontWeight="bold">
-              01
-            </Text>
-          </Flex>
-          <Text
-            fontSize="x-small"
-            fontWeight="bold"
-            textTransform="uppercase"
-            letterSpacing="widest"
-            color="orangered"
-          >
-            Tu cocina, nuevas ideas
-          </Text>
-        </HStack>
+      <Flex direction="column" flex="1" w="100%">
+        <HeroSection onSearch={handleSearch} isLoading={loading} />
 
-        <Heading
-          as="h1"
-          size="4xl"
-          fontFamily="'Fraunces', serif"
-          lineHeight={1}
+        <Box
+          backgroundColor="#fbfaf5"
+          flex="1"
+          px={{ base: 6, md: 12, lg: 20 }}
+          pt={{ base: 8, lg: 12 }}
+          pb={{ base: 10, lg: 16 }}
         >
-          Comer bien empieza{" "}
-          <Text as="span" color="orangered">
-            por aquí.
-          </Text>
-        </Heading>
-
-        <Text color="gray.600" fontSize="sm">
-          Convierte los ingredientes que ya tienes en recetas memorables,
-          simples y llenas de sabor.
-        </Text>
-      </VStack>
-
-      <SearchHero onSearch={handleSearch} isLoading={loading} />
-
-      {/* 4. Título dinámico (opcional pero le da un toque profesional) */}
-      <VStack
-        as="h2"
-        mt={10}
-        mb={4}
-        fontFamily="'Fraunces', serif"
-        align="stretch"
-      >
-        {!hasSearched ? (
-          <>
-            <Text
-              fontSize="x-small"
-              fontWeight="bold"
-              textTransform="uppercase"
-              letterSpacing="widest"
-              color="orangered"
-              fontFamily="DM Sans"
+          <VStack
+            mb={4}
+            align="stretch"
+            id="recetas"
+            borderBottom="1px solid"
+            pb={4}
+          >
+            <Flex
+              direction={{ base: "column", md: "row" }}
+              justify="space-between"
+              align={{ base: "start", md: "end" }}
+              w="100%"
             >
-              Selección saborea
-            </Text>
-            <Heading fontFamily="'Fraunces', serif" fontSize="2xl">
-              Una mesa llena de ideas
-            </Heading>
-            <Flex align="center" gap={2}>
-              <Text color="orangered" fontSize="2xl">
-                06
-              </Text>
-              <Text
-                lineHeight="1"
-                fontFamily="DM Sans"
-                fontSize="x-small"
-                color="gray.500"
-                textTransform="uppercase"
-                letterSpacing="widest"
-                fontWeight="bold"
-              >
-                Recetas <br></br> encontradas
+              <VStack align="start" gap={4}>
+                <Text
+                  fontSize="x-small"
+                  fontWeight="bold"
+                  textTransform="uppercase"
+                  letterSpacing="widest"
+                  color="orangered"
+                  fontFamily="DM Sans"
+                >
+                  {hasSearched ? "Resultados de búsqueda" : "Selección saborea"}
+                </Text>
+
+                <Heading
+                  as="h2"
+                  fontFamily="'Fraunces', serif"
+                  fontSize={{ base: "2xl", md: "4xl" }}
+                >
+                  {hasSearched
+                    ? "Lo que encontramos para ti"
+                    : "Una mesa llena de ideas"}
+                </Heading>
+              </VStack>
+
+              <Flex align="center" gap={4} mt={{ base: 4, md: 0 }}>
+                <Text
+                  color="orangered"
+                  fontSize={{ base: "2xl", md: "3xl" }}
+                  fontWeight="bold"
+                  fontFamily="'Fraunces', serif"
+                  lineHeight={1}
+                >
+                  {recipes.length < 10 ? `0${recipes.length}` : recipes.length}
+                </Text>
+                <Text
+                  lineHeight="1.1"
+                  fontFamily="DM Sans"
+                  fontSize="x-small"
+                  color="gray.500"
+                  textTransform="uppercase"
+                  letterSpacing="widest"
+                  fontWeight="bold"
+                >
+                  Recetas <br /> encontradas
+                </Text>
+              </Flex>
+            </Flex>
+          </VStack>
+
+          {loading ? (
+            <Flex justify="center" py={16}>
+              <Text fontSize={{ base: "md", md: "lg" }} color="gray.500">
+                {hasSearched
+                  ? "Buscando recetas..."
+                  : "Cargando recetas deliciosas..."}
               </Text>
             </Flex>
-          </>
-        ) : (
-          <Text>asdasd</Text>
-        )}
-      </VStack>
-
-      {/* 5. Renderizado de la lista o estado de carga */}
-      {loading ? (
-        <Flex justify="center" py={10}>
-          <Text fontSize="lg" color="gray.500">
-            {hasSearched
-              ? "Buscando recetas..."
-              : "Cargando recetas deliciosas..."}
-          </Text>
-        </Flex>
-      ) : recipes.length > 0 ? (
-        <RecipeList
-          recipes={recipes}
-          type={hasSearched ? "search" : "random"}
-        />
-      ) : (
-        <Text color="gray.500" py={10}>
-          No se encontraron recetas. ¡Intenta con otros ingredientes!
-        </Text>
-      )}
+          ) : recipes.length > 0 ? (
+            <RecipeList
+              recipes={recipes}
+              type={hasSearched ? "search" : "random"}
+            />
+          ) : (
+            <Text
+              color="gray.500"
+              py={16}
+              textAlign="center"
+              fontSize={{ base: "sm", md: "md" }}
+            >
+              No se encontraron recetas. ¡Intenta con otros ingredientes!
+            </Text>
+          )}
+        </Box>
+      </Flex>
     </BaseLayout>
   );
 };
