@@ -12,7 +12,6 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  // Corregido: succes -> success
   login: (
     username: string,
     password: string,
@@ -34,6 +33,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (username: string, password: string) => {
     try {
+      if (window.location.hostname !== "localhost") {
+        if (username === "admin1" && password === "adminpass") {
+          const sesion = { username: "admin1" };
+          localStorage.setItem("SesionSaborea", JSON.stringify(sesion));
+          setUser(sesion);
+          return { success: true };
+        } else {
+          return {
+            success: false,
+            message: "Usuario o contraseña incorrectos (Demo)",
+          };
+        }
+      }
+
       const response = await fetch(
         `http://localhost:3000/user?username=${username}`,
       );
@@ -48,13 +61,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (usuarioEncontrado.password === password) {
         const sesion = { username: usuarioEncontrado.username };
 
-        // Corregido: Unificado el nombre de la clave
         localStorage.setItem("SesionSaborea", JSON.stringify(sesion));
         setUser(sesion);
 
         return { success: true };
       } else {
-        // Corregido: mesagge -> message
         return { success: false, message: "Contraseña incorrecta" };
       }
     } catch (error) {
